@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Setor = require('../models/Setor');
-const Funcionario = require('../models/Funcionario');
+const Setor = require('../models/setorModel');
+const Funcionario = require('../models/funcionarioModel');
 
-const userController = require('../controllers/user.controller');
-const authMiddleware = require('../middleware/auth.middleware');
+const userController = require('../controllers/userController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.post('/register', userController.registerUser);
 
@@ -13,9 +13,6 @@ router.post('/login', userController.loginUser);
 router.get('/me', authMiddleware, (req, res) => {
     res.json(req.user);
 });
-
-module.exports = router;
-
 
 // rota para cadastrar um Setor
 router.post('/setor', async (req, res) => {
@@ -99,35 +96,28 @@ router.put('/funcionario/:id', async (req, res) => {
                     funcoes_principais: req.body.funcoes_principais,
                     funcoes_secundarias: req.body.funcoes_secundarias,
                     sistemas: req.body.sistemas,
-                    prontuario: req.body.prontuario,
-                    posto_trabalho: req.body.posto_trabalho,
-                    empresa: req.body.empresa
+                    prontuario: req.body.prontuario
                 }
             },
-            { new: true } // retorna o novo objeto atualizado
-        ).select('-cargo'); // exclui o campo "cargo" da resposta
-
+            { new: true }
+        );
         res.status(200).json(funcionario);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-router.post('/register', async (req, res) => {
+// rota para deletar um Funcionário
+router.delete('/funcionario/:id', async (req, res) => {
     try {
-        const { name, email, password, permissions } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({
-            name,
-            email,
-            password: hashedPassword,
-            permissions: generatePermissions(permissions)
-        });
-        await user.save();
-        res.status(201).json({ message: 'User created successfully' });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+        const funcionario = await Funcionario.findByIdAndDelete(req.params.id);
+        res.status(200).json(funcionario);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 });
 
 module.exports = router;
+
+
+

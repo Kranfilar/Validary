@@ -5,7 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Configurações de Middleware
-app.use(cors()); // Middleware do CORS
+app.use(cors());
 app.use(express.json());
 
 // Configuração da conexão com o banco de dados MongoDB
@@ -16,15 +16,15 @@ mongoose.connect(process.env.DB_CONNECTION_STRING, {
 });
 
 // Configuração das rotas
-const authRoutes = require('./routes/auth.routes');
-const userRoutes = require('./routes/user.routes');
-const setorRoutes = require('./routes/setor.routes');
-const funcionarioRoutes = require('./routes/funcionario.routes');
+const authRoutes = require('./routes/routes.js');
+const userRoutes = require('./routes/routes.js');
+const setorRoutes = require('./routes/routes.js');
+const funcionarioRoutes = require('./routes/routes.js');
 
-app.use('/auth', authRoutes);
-app.use('/user', userRoutes);
-app.use('/setor', setorRoutes);
-app.use('/funcionario', funcionarioRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/setor', setorRoutes);
+app.use('/api/funcionario', funcionarioRoutes);
 
 // Inicialização do servidor
 const PORT = process.env.PORT || 5000;
