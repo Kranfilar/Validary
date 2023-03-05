@@ -5,7 +5,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Configurações de Middleware
-app.use(cors());
+app.use(cors()); // Middleware do CORS
 app.use(express.json());
 
 // Configuração da conexão com o banco de dados MongoDB
